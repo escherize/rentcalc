@@ -29,13 +29,13 @@
 
 (defn set-content [node]
   (dommy/replace! (sel1 :#app)
-                  [:div#app
+                  [:div#app {:style "padding-left: 100px;"}
                    [:div node]
-                   [:div#answer]]))
+                   [:div [:div#answer]]]))
 
 (defn set-answer [node]
   (dommy/replace! (sel1 :#answer)
-                  [:div#answer [:div.container node]]))
+                  [:div#answer [:div node]]))
 
 (def globals {:total-sq-ft  1267
               :price        3479
@@ -52,29 +52,24 @@
                  :value (:headcount room)
                  :id (str "headcount-" idx)
                  :onKeyUp "rent_calc.core.show_rent()"}]]
-   [:td [:input {:type "number"
-                 :value (:area room)
-                 :disabled "disabled"
-                 :id (str "area-" idx)
-                 :onKeyUp "rent_calc.core.show_rent()"}]]])
+   [:td [:span {:id (str "area-" idx)} (:area room)]]])
 
 (defn start-page []
   (set-content
-   [:div.container
+   [:div
     [:div 
      [:h2 "Rent Calc 130 36th"]
-     [:table
+     [:table.pure-table-bordered.pure-table
       (map
        (fn [[k v]] [:tr
                     [:td (name k)]
                     [:td [:input {:type "number"
                                   :value v
                                   :id (name k)
-                                  :onchange "rent_calc.core.show_rent()"
                                   :onKeyUp "rent_calc.core.show_rent()"}]]])
        globals)]]
     [:div [:h2 "Rooms"]
-     [:table
+     [:table.pure-table-bordered.pure-table
       [:th [:td "name"] [:td "headcount"] [:td "area"]
        (map room->start rooms (range 1 100))]]]]))
 
